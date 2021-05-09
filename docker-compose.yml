@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+    # Basic mysql database
+    database:
+        image: mysql:5.7.22
+        container_name: database
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - ./mysql:/var/lib/mysql
+            - ./config/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - app-network
+
+    # Backend laravel app
+    backend:
+        build:
+            context: ./backend/
+            dockerfile: Dockerfile
+        depends_on:
+            - database
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /app
+        volumes:
+            - ./backend:/app
+            - ./.env:/app/.env
+        ports:
+            - 9000:9000
+        networks:
+            - app-network
+
+    # Frontend Vue JS app
+    frontend:
+        build:
+            context: ./frontend/
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend:/app
+            - ./.env:/app/.env
+        ports:
+            - 8080:8080
+        networks:
+            - app-network
+        command: "npm run serve"
+
+#Volumes
+volumes:
+    dbdata:
+        driver: local
+
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge
