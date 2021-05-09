@@ -1,0 +1,32 @@
+.card {
+    // The individual movie card
+    &.card-movie {
+        cursor: pointer;
+
+        .card-image {
+            display: block;
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+                content: '';
+                display: block;
+                padding-bottom: 148%;
+            }
+
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+
+                transform: translate(-50%, -50%);
+            }
+        }
+        .card-body {
+            h3 {
+                height: 70px;
+            }
+        }
+    }
+}
