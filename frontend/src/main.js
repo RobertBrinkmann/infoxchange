@@ -8,7 +8,7 @@ import bootstrap from 'bootstrap';
 import 'bootstrap/scss/bootstrap.scss';
 import './app.scss';
 
-axios.defaults.baseURL = 'http://localhost:8001/api';
+axios.defaults.baseURL = 'http://localhost:9000/api';
 
 createApp(App)
 	.use(router)

@@ -35,6 +35,7 @@
 
 <script>
     import imdb from '@/api/omdb'
+    import backend from '@/api/backend'
 
     export default {
         data() {
@@ -69,8 +70,14 @@
                             this.message = 'Sorry, we couldn\'t find any movies for those search values.';
                         }
                     })
-                    .finally({
-                        // TODO: Send something ot the backend API [this.search, this.movies.length, this.message]
+                    .finally(() => {
+                        backend.postActivity({
+                            search: this.search,
+                            results: this.movies.length,
+                            message: this.message
+                        }).then(response => {
+                            console.log(response);
+                        })
                     });
             }
         }
