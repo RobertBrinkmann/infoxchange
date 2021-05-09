@@ -25,6 +25,26 @@ const find = async (search) => {
     return result.data;
 }
 
+const get = async (imdbID) => {
+    let result = null;
+    try {
+        result = await axios('http://www.omdbapi.com', {
+			params: {
+				i: imdbID,
+				apikey: process.env.VUE_APP_OMDB_KEY
+			}
+		});
+    } catch (e) {
+        console.log(e);
+		return {
+			error: e.response.data.Error
+		};
+    }
+
+    return result.data;
+}
+
 export default {
-	find: find
+	find: find,
+	get: get
 }

@@ -16,7 +16,7 @@
             </div>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
                 <div class="col" v-for="movie in movies" v-bind:key="movie">
-                    <div class="card shadow-sm card-movie d-flex flex-column" @click="selectMovie(movie.imdbID)">
+                    <router-link :to="{name: 'movie', params: {id: movie.imdbID, keywords: search}}" tag="div" class="card shadow-sm card-movie d-flex flex-column" @click="selectMovie(movie.imdbID)">
                         <div class="card-image">
                             <img v-bind:src="movie.Poster" @error="errorImage(movie, $event)" v-if="movie.imageError == undefined"/>
                             <div class="image-error text-muted text-center" v-if="movie.imageError">Sorry, couldn't find the image</div>
@@ -28,7 +28,7 @@
                                 <small class="text-muted">Year {{movie.Year}}</small>
                             </div>
                         </div>
-                    </div>
+                    </router-link>
                 </div>
             </div>
         </div>
