@@ -8,7 +8,11 @@ import axios from 'axios'
 const postActivity = async (searchResponse) => {
     let result = null;
     try {
-        result = await axios.post(`projects`, searchResponse);
+        result = await axios.post(`activity`, {
+            search: searchResponse.search,
+            results: searchResponse.results,
+            message: searchResponse.message
+        });
     } catch (e) {
         console.log(e);
 		return {
@@ -16,7 +20,7 @@ const postActivity = async (searchResponse) => {
 		};
     }
 
-    return result.message;
+    return result.data;
 }
 
 export default {

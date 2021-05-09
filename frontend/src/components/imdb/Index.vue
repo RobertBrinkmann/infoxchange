@@ -18,11 +18,13 @@
                 <div class="col" v-for="movie in movies" v-bind:key="movie">
                     <div class="card shadow-sm card-movie d-flex flex-column" @click="selectMovie(movie.imdbID)">
                         <div class="card-image">
-                            <img v-bind:src="movie.Poster" />
+                            <img v-bind:src="movie.Poster" @error="errorImage(movie, $event)" v-if="movie.imageError == undefined"/>
+                            <div class="image-error text-muted text-center" v-if="movie.imageError">Sorry, couldn't find the image</div>
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h3>{{movie.Title}}</h3>
-                            <div class="mt-auto text-end">
+                            <div class="card-info mt-auto d-flex justify-content-between">
+                                <small class="text-muted mt-auto">{{movie.Type}}</small>
                                 <small class="text-muted">Year {{movie.Year}}</small>
                             </div>
                         </div>
@@ -46,10 +48,7 @@
                 message: 'Enter some details to search for a movie :)',
             }
         },
-        created() {
-        },
         methods: {
-            // TODO
             searchMovies() {
                 if (this.search == '') {
                     return;
@@ -79,6 +78,9 @@
                             console.log(response);
                         })
                     });
+            },
+            errorImage(movie, error) {
+                movie.imageError = error;
             }
         }
     }
