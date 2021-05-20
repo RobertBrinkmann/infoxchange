@@ -6,20 +6,30 @@ import axios from 'axios'
  * @param {string} search Movie title
  * @returns {JSON} JSON result
  */
-const find = async (search, page = 0) => {
+const find = async (search, page = 1) => {
     let result = null;
     try {
         result = await axios('http://www.omdbapi.com', {
 			params: {
 				s: search,
-                page: page + 1,
+                page: page,
 				apikey: process.env.VUE_APP_OMDB_KEY
 			}
 		});
+
+        if (result.data.Error != undefined) {
+            throw result.data;
+        }
     } catch (e) {
         console.log(e);
+        if (e.Error != undefined) {
+            return {
+                Error: e.Error
+            };
+        }
+
 		return {
-			error: e.response.data.Error
+			Error: e.message
 		};
     }
 
